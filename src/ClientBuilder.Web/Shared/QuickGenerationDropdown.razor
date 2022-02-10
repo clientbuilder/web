@@ -1,0 +1,54 @@
+﻿@if (!string.IsNullOrWhiteSpace(selectedApplication))
+{
+    <div class="dropdown" id="quick-generation">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="quick-generation-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="mdi mdi-application-braces"></i> @applications.GetValueOrDefault(selectedApplication)
+        </button>
+        <div class="dropdown-menu">
+            <p class="menu-text">Generation Sources</p>
+            <ul aria-labelledby="quick-generation-dropdown">
+                @foreach (var application in this.applications)
+                {
+                    <li class="menu-li">
+                        <a class="dropdown-item @(application.Key == selectedApplication ? "active" : string.Empty)"
+                           @onclick="() => SelectApplication(application.Key)">
+                            <i class="mdi mdi-application-braces"></i> @application.Value
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <button class="btn btn-primary ms-0 ms-lg-1" type="button">
+            <i class="mdi mdi-motion-play"></i> Generate
+        </button>
+    </div>
+}
+
+@code {
+
+    private string selectedApplication;
+
+    private Dictionary<string, string> applications;
+
+    protected override Task OnInitializedAsync()
+    {
+        this.applications = new Dictionary<string, string>
+        {
+            {Guid.NewGuid().ToString(), "My App"},
+            {Guid.NewGuid().ToString(), "My Middle App"},
+            {Guid.NewGuid().ToString(), "My Very Long-Name Application"},
+        };
+
+        this.selectedApplication = this.applications.First().Key;
+        return base.OnInitializedAsync();
+    }
+
+    private void SelectApplication(string applicationId)
+    {
+        if (this.selectedApplication != applicationId)
+        {
+            this.selectedApplication = applicationId;
+        }
+    }
+
+}

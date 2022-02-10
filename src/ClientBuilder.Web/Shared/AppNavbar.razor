@@ -1,0 +1,38 @@
+﻿<nav class="navbar navbar-light navbar-expand-lg" id="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/assets/images/logo.svg" alt="Client Builder" class="d-inline-block align-text-top">
+            <span class="text">Client Builder</span>
+        </a>
+        <button class="navbar-toggler btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="mdi mdi-menu"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
+                <li class="nav-item">
+                    <NavLink href="" ActiveClass="active" Match="NavLinkMatch.All" class="nav-link">
+                        Home
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="sources" ActiveClass="active" class="nav-link">
+                        Sources
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="modules" ActiveClass="active" class="nav-link">
+                        Modules
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://docs.clientbuilder.dev/">Docs</a>
+                </li>
+            </ul>
+            <QuickGenerationDropdown/>
+        </div>
+    </div>
+</nav>
+
+@code {
+
+}

@@ -1,0 +1,14 @@
+﻿@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+@import "variables";
+@import "fonts";
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/@mdi/font/scss/materialdesignicons";
+
+@import "base";
+@import "elements";
+
+@import "blazor";
+@import "navbar";

@@ -1,0 +1,22 @@
+﻿html, body {
+  font-family: $font-family-main;
+  * {
+    font-family: $font-family-main;
+  }
+}
+
+::selection {
+  background: $main-color;
+  color: $second-color;
+}
+
+::-moz-selection {
+  background: $main-color;
+  color: $second-color;
+}
+
+*:-moz-full-screen,
+*:-webkit-full-screen,
+*:fullscreen *:-ms-fullscreen {
+  overflow: auto !important;
+}
