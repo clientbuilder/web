@@ -2,6 +2,7 @@
   from = "https://clientbuilder.netlify.app/*"
   to = "https://clientbuilder.dev/:splat"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/*"
