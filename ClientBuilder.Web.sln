@@ -5,6 +5,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{4DFE4DCF-4599-4B3B-98BF-726AE78E4796}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		netlify.toml = netlify.toml
 	EndProjectSection
 EndProject
 Global
