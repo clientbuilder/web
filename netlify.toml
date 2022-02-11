@@ -1,9 +1,9 @@
 [[redirects]]
-  from = "https://clientbuilder.netlify.app/*"
-  to = "https://clientbuilder.dev/:splat"
-  status = 301
-
-[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  
+[[redirects]]
+  from = "https://clientbuilder.netlify.app/*"
+  to = "https://clientbuilder.dev/:splat"
+  status = 301
