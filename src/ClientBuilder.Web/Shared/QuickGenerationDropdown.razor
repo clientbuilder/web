@@ -1,18 +1,21 @@
-﻿@if (!string.IsNullOrWhiteSpace(selectedApplication))
+﻿@inject IApplicationStore Store
+@inject IBootstrapService BootstrapService
+
+@if (SelectedApplicationId != Guid.Empty)
 {
     <div class="dropdown" id="quick-generation">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="quick-generation-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="mdi mdi-application-braces"></i> @applications.GetValueOrDefault(selectedApplication)
+            <i class="mdi mdi-application-braces"></i> @Applications.First(x => x.Id == SelectedApplicationId).Name
         </button>
         <div class="dropdown-menu">
             <p class="menu-text">Generation Sources</p>
             <ul aria-labelledby="quick-generation-dropdown">
-                @foreach (var application in this.applications)
+                @foreach (var application in Applications)
                 {
                     <li class="menu-li">
-                        <a class="dropdown-item @(application.Key == selectedApplication ? "active" : string.Empty)"
-                           @onclick="() => SelectApplication(application.Key)">
-                            <i class="mdi mdi-application-braces"></i> @application.Value
+                        <a class="dropdown-item @(application.Id == SelectedApplicationId ? "active" : string.Empty)"
+                           @onclick="async () => await SelectApplicationAsync(application.Id)">
+                            <i class="mdi mdi-application-braces"></i> @application.Name
                         </a>
                     </li>
                 }
@@ -25,30 +28,28 @@
 }
 
 @code {
+    private Guid SelectedApplicationId => Store.SelectedApplicationId;
 
-    private string selectedApplication;
-
-    private Dictionary<string, string> applications;
+    private IEnumerable<Application> Applications => Store.Applications;
 
     protected override Task OnInitializedAsync()
     {
-        this.applications = new Dictionary<string, string>
+        Store.ApplicationChanged += (_, _) =>
         {
-            {Guid.NewGuid().ToString(), "My App"},
-            {Guid.NewGuid().ToString(), "My Middle App"},
-            {Guid.NewGuid().ToString(), "My Very Long-Name Application"},
+            StateHasChanged();
         };
 
-        this.selectedApplication = this.applications.First().Key;
         return base.OnInitializedAsync();
     }
 
-    private void SelectApplication(string applicationId)
+    private async Task SelectApplicationAsync(Guid applicationId)
     {
-        if (this.selectedApplication != applicationId)
+        if (SelectedApplicationId != applicationId)
         {
-            this.selectedApplication = applicationId;
+            await Store.SelectApplicationAsync(applicationId);
+
+            var currentApplication = Applications.FirstOrDefault(x => x.Id == applicationId);
+            BootstrapService.ShowToast($"{currentApplication?.Name} has been selected", "info");
         }
     }
-
 }

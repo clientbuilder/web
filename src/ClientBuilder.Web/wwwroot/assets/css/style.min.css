@@ -7647,62 +7647,46 @@ textarea.form-control-lg {
 }
 
 .bg-primary {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #666285 !important;
 }
 
 .bg-secondary {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #dcdaef !important;
 }
 
 .bg-success {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #67c72d !important;
 }
 
 .bg-info {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #0a7cb2 !important;
 }
 
 .bg-warning {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #ffb208 !important;
 }
 
 .bg-danger {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #c90101 !important;
 }
 
 .bg-light {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #dedede !important;
 }
 
 .bg-dark {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
-}
-
-.bg-black {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-black-rgb), var(--bs-bg-opacity)) !important;
-}
-
-.bg-white {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #2b2b2b !important;
 }
 
 .bg-body {
-  --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #fff !important;
+}
+
+.bg-white {
+  background-color: white !important;
 }
 
 .bg-transparent {
-  --bs-bg-opacity: 1;
   background-color: transparent !important;
 }
 
@@ -37783,6 +37767,10 @@ html *, body * {
   overflow: auto !important;
 }
 
+.text-white {
+  color: white !important;
+}
+
 .btn {
   padding: 0.25rem 0.8rem;
   font-weight: 600;
@@ -37793,6 +37781,70 @@ html *, body * {
 }
 .btn.btn-secondary {
   color: #666285;
+}
+
+.table thead {
+  background: #666285;
+  color: #dcdaef;
+}
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.form-control {
+  font-size: 0.8rem;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+.form-control:focus, .form-control:active {
+  border-color: #666285;
+}
+
+.validation-message {
+  font-size: 0.68rem;
+  font-weight: bold;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.table td.fit,
+.table th.fit {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.modal .modal-content {
+  border: none;
+}
+.modal .modal-content .modal-header {
+  padding: 0.8rem 1rem;
+  background: #666285;
+}
+.modal .modal-content .modal-header .btn-close {
+  background-size: 0.8em;
+  background-color: white;
+  padding: 0.4rem;
+  margin-right: 0;
+}
+.modal .modal-content .modal-header .modal-title {
+  color: #dcdaef;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.toast .btn-close {
+  background-size: 0.8em;
+  background-color: white;
+  padding: 0.4rem;
+  margin-right: 0;
 }
 
 #blazor-error-ui {
