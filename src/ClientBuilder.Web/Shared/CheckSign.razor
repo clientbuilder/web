@@ -1,0 +1,19 @@
+﻿<span class="check-sign">
+    @if (Value)
+    {
+        <span class="generated">
+            <i class="mdi mdi-checkbox-marked"></i>
+        </span>
+    }
+    else
+    {
+        <span class="non-generated">
+            <i class=" mdi mdi-checkbox-blank-outline"></i>
+        </span>
+    }
+</span>
+
+@code {
+    [Parameter]
+    public bool Value { get; set; }
+}

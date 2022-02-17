@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using ClientBuilder.Web.Exceptions;
@@ -29,6 +30,8 @@ public class ApplicationStore : IApplicationStore
     public IReadOnlyCollection<Application> Applications => this.applications;
 
     public Guid SelectedApplicationId => this.selectedApplicationId;
+
+    public Application SelectedApplication => this.applications.FirstOrDefault(x => x.Id == this.selectedApplicationId);
 
     public async Task SaveApplicationAsync(Application application)
     {

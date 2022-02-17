@@ -13,6 +13,8 @@ public interface IApplicationStore
 
     Guid SelectedApplicationId { get; }
 
+    Application SelectedApplication { get; }
+
     Task SaveApplicationAsync(Application application);
 
     Task DeleteApplicationAsync(Guid applicationId);

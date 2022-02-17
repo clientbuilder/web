@@ -1,33 +1,184 @@
 ﻿@page "/modules"
+@inject IApplicationServiceAgent ApplicationServiceAgent
+@inject IApplicationStore ApplicationStore
+@inject IBootstrapService BootstrapService
 
 <PageTitle>Modules | Client Builder</PageTitle>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-    </tr>
-  </tbody>
-</table>
+<TitleSection Title="Generate your modules">
+    If you have followed documentation and have created scaffold modules you can check and execute them here.
+    If you need to generate modules in groups you can use our built-in bulk triggers.
+</TitleSection>
+
+@if (this.modules != null && this.modules.Any())
+{
+    <div class="my-2 d-flex">
+        <div class="d-flex w-100">
+            <div class="ms-auto me-0">
+                @foreach (var module in modulesByClients)
+                {
+                    <button type="button" class="btn btn-primary btn-get-trigger ms-auto me-1">
+                        <div class="d-flex">
+                            <img class="btn-inner-icon my-auto ms-0 me-auto" alt="@module.ScaffoldTypeName" src="@GetApplicationUrl(module.IconUrl)"/>
+                            <span class="my-auto ms-2">@module.ScaffoldTypeName (@module.Count)</span>
+                        </div>
+                    </button>
+                }
+                @foreach (var module in modulesByType)
+                {
+                    <button type="button" class="btn btn-primary btn-get-trigger ms-auto me-1">
+                        <div class="d-flex">
+                            <i class="@GetInstanceTypeIcon(module.Type)"></i>
+                            <span class="my-auto ms-2">@module.Type (@module.Count)</span>
+                        </div>
+                    </button>
+                }
+                <button type="button" class="btn btn-primary mx-0">
+                    All
+                </button>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="fit">Icon</th>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Generated</th>
+            <th scope="col">Locked</th>
+            <th scope="col" class="fit">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var module in modules)
+        {
+            <tr>
+                <td class="fit">
+                    <img class="module-icon" src="@GetApplicationUrl(module.IconUrl)" alt="@module.Name"/>
+                </td>
+                <td>@module.Name</td>
+                <td>
+                    <span class="badge bg-primary">
+                        <i class="@GetInstanceTypeIcon(module.Type)"></i> @module.Type
+                    </span>
+                </td>
+                <td>
+                    <CheckSign Value="module.Generated"/>
+                </td>
+                <td>
+                    <CheckSign Value="module.Locked"/>
+                </td>
+                <td class="fit">
+                    <div class="d-flex">
+                        <button class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Folders", module.Folders)'>@module.Folders.Count() Folder@(module.Folders.Count() != 1 ? "s" : string.Empty)</button>
+                        <button class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Files", module.Files)'>@module.Files.Count() File@(module.Files.Count() != 1 ? "s" : string.Empty)</button>
+                        <button class="w-auto btn btn-primary" @onclick="async () => await GenerateAsync(module.Id)">Generate</button>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No modules are registered!</p>
+}
+
+<div class="modal fade" id="module-system-items-modal" tabindex="-1" aria-labelledby="module-system-items-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@fileSystemItemsModalTitle</h5>
+                <button type="button" class="btn-close btn btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (modalFileSystemItems != null)
+                {
+                    <table class="table w-100">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Path</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var fileSystemItem in modalFileSystemItems)
+                        {
+                            <tr>
+                                <td>@fileSystemItem.Name</td>
+                                <td>@fileSystemItem.Path</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @code {
+    private IEnumerable<ScaffoldModule> modules;
+    private IEnumerable<(int Count, string ClientId, string IconUrl, string ScaffoldTypeName)> modulesByClients;
+    private IEnumerable<(int Count, string IconUrl, InstanceType Type)> modulesByType;
+
+    private string fileSystemItemsModalTitle;
+    private IEnumerable<ScaffoldModuleFileSystemItem> modalFileSystemItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.modules = await ApplicationServiceAgent.FetchScaffoldModulesAsync();
+        this.modulesByClients = this.modules
+            .GroupBy(x => x.ClientId)
+            .Select(x => (x.Count(), x.First().ClientId, x.First().IconUrl, x.First().ScaffoldTypeName));
+        this.modulesByType = this.modules
+            .GroupBy(x => x.Type)
+            .Select(x => (x.Count(), x.First().IconUrl, x.First().Type));
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task GenerateAsync(string moduleId)
+    {
+    }
+
+    private string GetApplicationUrl(string relativeUrl)
+    {
+        var applicationUrl = this.ApplicationStore.SelectedApplication.Url;
+        if (applicationUrl.EndsWith("/"))
+        {
+            applicationUrl = applicationUrl.Substring(0, applicationUrl.Length - 1);
+        }
+
+        string path = relativeUrl;
+        if (path.StartsWith("/"))
+        {
+            path.Substring(1);
+        }
+
+        return $"{applicationUrl}/{path}";
+    }
+
+    private string GetInstanceTypeIcon(InstanceType type)
+    {
+        return type switch
+        {
+            InstanceType.Web => "mdi mdi-web",
+            InstanceType.Mobile => "mdi mdi-cellphone",
+            InstanceType.Desktop => "mdi mdi-desktop-mac",
+            InstanceType.Undefined => "mdi mdi-progress-question",
+            _ => "mdi mdi-progress-question"
+            };
+    }
+
+    private async Task ShowModuleSystemItemsAsync(string title, IEnumerable<ScaffoldModuleFileSystemItem> fileSystemItems)
+    {
+        this.fileSystemItemsModalTitle = title;
+        this.modalFileSystemItems = fileSystemItems;
+        await BootstrapService.ShowModalAsync("module-system-items-modal");
+    }
 
 }

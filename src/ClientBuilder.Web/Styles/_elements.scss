@@ -11,6 +11,10 @@
   &.btn-secondary {
     color: $primary;
   }
+  
+  .btn-inner-icon {
+    height: 14px;
+  }
 }
 
 .table {
@@ -85,5 +89,27 @@
     background-color: $white;
     padding: 0.4rem;
     margin-right: 0;
+  }
+}
+
+.check-sign {
+  font-size: 1.2rem;
+
+  .generated {
+    color: $primary;
+  }
+  
+  .non-generated {
+    color: $gray-400;
+  }
+}
+
+.module-icon {
+  height: 26px;
+}
+
+.btn-get-trigger {
+  .btn-inner-icon {
+    filter: $img-filter-secondary;
   }
 }

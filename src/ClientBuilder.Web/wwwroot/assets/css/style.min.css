@@ -7556,77 +7556,58 @@ textarea.form-control-lg {
 
 /* rtl:end:remove */
 .text-primary {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: #666285 !important;
 }
 
 .text-secondary {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) !important;
+  color: #dcdaef !important;
 }
 
 .text-success {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
+  color: #67c72d !important;
 }
 
 .text-info {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-info-rgb), var(--bs-text-opacity)) !important;
+  color: #0a7cb2 !important;
 }
 
 .text-warning {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-warning-rgb), var(--bs-text-opacity)) !important;
+  color: #ffb208 !important;
 }
 
 .text-danger {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-danger-rgb), var(--bs-text-opacity)) !important;
+  color: #c90101 !important;
 }
 
 .text-light {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
+  color: #dedede !important;
 }
 
 .text-dark {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
-}
-
-.text-black {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-black-rgb), var(--bs-text-opacity)) !important;
+  color: #2b2b2b !important;
 }
 
 .text-white {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-white-rgb), var(--bs-text-opacity)) !important;
+  color: white !important;
 }
 
 .text-body {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
+  color: #212529 !important;
 }
 
 .text-muted {
-  --bs-text-opacity: 1;
   color: #6c757d !important;
 }
 
 .text-black-50 {
-  --bs-text-opacity: 1;
   color: rgba(0, 0, 0, 0.5) !important;
 }
 
 .text-white-50 {
-  --bs-text-opacity: 1;
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .text-reset {
-  --bs-text-opacity: 1;
   color: inherit !important;
 }
 
@@ -37782,6 +37763,9 @@ html *, body * {
 .btn.btn-secondary {
   color: #666285;
 }
+.btn .btn-inner-icon {
+  height: 14px;
+}
 
 .table thead {
   background: #666285;
@@ -37845,6 +37829,24 @@ html *, body * {
   background-color: white;
   padding: 0.4rem;
   margin-right: 0;
+}
+
+.check-sign {
+  font-size: 1.2rem;
+}
+.check-sign .generated {
+  color: #666285;
+}
+.check-sign .non-generated {
+  color: #ced4da;
+}
+
+.module-icon {
+  height: 26px;
+}
+
+.btn-get-trigger .btn-inner-icon {
+  filter: invert(97%) sepia(14%) saturate(1660%) hue-rotate(181deg) brightness(96%) contrast(95%);
 }
 
 #blazor-error-ui {

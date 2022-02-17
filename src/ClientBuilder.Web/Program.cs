@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using Blazored.LocalStorage;
 using ClientBuilder.Web;
 using ClientBuilder.Web.Services;
@@ -11,12 +9,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<IApplicationStore, ApplicationStore>();
-
 builder.Services.AddScoped<IBootstrapService, BootstrapService>();
+builder.Services.AddScoped<IApplicationServiceAgent, ApplicationServiceAgent>();
 
 var host = builder.Build();
 var applicationStore = host.Services.GetRequiredService<IApplicationStore>();
