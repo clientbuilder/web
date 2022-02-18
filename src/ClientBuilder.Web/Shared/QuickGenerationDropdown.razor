@@ -6,7 +6,7 @@
 {
     <div class="dropdown" id="quick-generation">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="quick-generation-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="mdi mdi-application-braces"></i> @Applications.First(x => x.Id == SelectedApplicationId).Name
+            <i class="mdi mdi-application-braces"></i> @Applications.FirstOrDefault(x => x.Id == SelectedApplicationId)?.Name
         </button>
         <div class="dropdown-menu">
             <p class="menu-text">Generation Sources</p>

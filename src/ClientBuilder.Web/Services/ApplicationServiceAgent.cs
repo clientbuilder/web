@@ -26,10 +26,17 @@ public class ApplicationServiceAgent : IApplicationServiceAgent
     {
         var currentApplication = applicationStore.SelectedApplication;
 
-        this.httpClient = new HttpClient
+        if (currentApplication != null)
         {
-            BaseAddress = new Uri(currentApplication.Url),
-        };
+            this.httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(currentApplication.Url),
+            };
+        }
+        else
+        {
+            this.httpClient = new HttpClient();
+        }
 
         applicationStore.ApplicationChanged += async (_, application) =>
         {
