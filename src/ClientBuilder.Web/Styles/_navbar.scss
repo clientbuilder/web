@@ -14,7 +14,7 @@
     display: flex;
     
     img {
-      height: 38px;
+      height: 48px;
       margin-right: 8px;
       margin-top: auto;
       margin-bottom: auto;
@@ -25,6 +25,7 @@
       margin-top: auto;
       margin-bottom: auto;
       font-size: 1.2rem;
+      color: $text-color;
     }
   }
   
@@ -32,6 +33,7 @@
     .nav-link {
       font-weight: 500;
       font-size: 0.88rem;
+      color: lighten($primary, 20%);
       
       &.active {
         color: $primary;

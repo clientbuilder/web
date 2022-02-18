@@ -1,5 +1,6 @@
 ﻿@inject IApplicationStore Store
 @inject IBootstrapService BootstrapService
+@inject IApplicationServiceAgent ApplicationServiceAgent
 
 @if (SelectedApplicationId != Guid.Empty)
 {
@@ -21,7 +22,7 @@
                 }
             </ul>
         </div>
-        <button class="btn btn-primary ms-0 ms-lg-1" type="button">
+        <button class="btn btn-primary ms-0 ms-lg-1" type="button" @onclick="async () => await GenerateAsync()">
             <i class="mdi mdi-motion-play"></i> Generate
         </button>
     </div>
@@ -42,6 +43,33 @@
         return base.OnInitializedAsync();
     }
 
+    private async Task GenerateAsync()
+    {
+        if (!ApplicationServiceAgent.Available)
+        {
+            this.BootstrapService.ShowToast("Selected application is not available", "danger");
+            return;
+        }
+        
+        var result = await ApplicationServiceAgent.GenerateAsync();
+        await HandleGenerationResultAsync(result);
+    }
+    
+    private async Task HandleGenerationResultAsync(GenerationResult result)
+    {
+        if (result.GenerationStatus == ScaffoldModuleGenerationStatusType.Successful)
+        {
+            this.BootstrapService.ShowToast("Modules have been generated successfully", "success");
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                this.BootstrapService.ShowToast(error, "warning");
+            }
+        }
+    }
+    
     private async Task SelectApplicationAsync(Guid applicationId)
     {
         if (SelectedApplicationId != applicationId)

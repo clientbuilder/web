@@ -1,17 +1,46 @@
-﻿<div class="p-4 mb-4 bg-primary rounded-3">
-    <div class="container-fluid py-2">
-        <h1 class="display-5 fw-bold text-secondary">@Title</h1>
-        <p class="col-md-8 fs-5 text-secondary">
-            @ChildContent
-        </p>
+﻿@inject IApplicationServiceAgent ApplicationServiceAgent
+
+@if (!ShowAlert || IsApplicationAvailable)
+{
+    <div class="p-4 mb-4 bg-primary rounded main-box-shadow">
+        <div class="container-fluid py-2">
+            <h1 class="display-5 fw-bold text-secondary">@Title</h1>
+            <p class="col-md-8 fs-5 text-secondary">
+                @ChildContent
+            </p>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="p-4 mb-4 bg-danger rounded main-box-shadow">
+        <div class="container-fluid py-2">
+            <h1 class="display-5 fw-bold text-secondary">Application is not available</h1>
+            <p class="col-md-8 fs-5 text-white">
+                Current application is not connected to the Client Builder UI. Please check whether your
+                development server is turned on or your URL is correct. Please consider that error could be
+                part of other issue. Please recheck the CORS middleware or your ASP.NET configuration.
+            </p>
+        </div>
+    </div>
+}
 
 @code {
+    [Parameter]
+    public bool ShowAlert { get; set; }
+    
     [Parameter]
     public string Title { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+
+    private bool IsApplicationAvailable => ApplicationServiceAgent.Available;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApplicationServiceAgent.AvailabilityChanged += (_, _) => { StateHasChanged(); };
+        await base.OnInitializedAsync();
+    }
 
 }

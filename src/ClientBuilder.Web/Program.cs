@@ -16,8 +16,11 @@ builder.Services.AddScoped<IBootstrapService, BootstrapService>();
 builder.Services.AddScoped<IApplicationServiceAgent, ApplicationServiceAgent>();
 
 var host = builder.Build();
-var applicationStore = host.Services.GetRequiredService<IApplicationStore>();
 
+var applicationStore = host.Services.GetRequiredService<IApplicationStore>();
 await applicationStore.LoadStoreAsync();
+
+var applicationServiceAgent = host.Services.GetRequiredService<IApplicationServiceAgent>();
+await applicationServiceAgent.SyncAvailabilityAsync();
 
 await host.RunAsync();

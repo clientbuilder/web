@@ -7,3 +7,10 @@ public enum InstanceType
     Mobile = 2,
     Desktop = 3,
 }
+
+public enum ScaffoldModuleGenerationStatusType
+{
+    Successful = 1,
+    SuccessfulWithErrors = 2,
+    Unsuccessful = 3,
+}

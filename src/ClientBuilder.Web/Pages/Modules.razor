@@ -5,19 +5,25 @@
 
 <PageTitle>Modules | Client Builder</PageTitle>
 
-<TitleSection Title="Generate your modules">
-    If you have followed documentation and have created scaffold modules you can check and execute them here.
+<TitleSection Title="Generate your modules" ShowAlert="true">
+    If you have followed the documentation and have created scaffold modules you can check and execute them here.
     If you need to generate modules in groups you can use our built-in bulk triggers.
 </TitleSection>
 
-@if (this.modules != null && this.modules.Any())
+@if (!IsApplicationAvailable)
+{
+    <p>
+        Cannot load modules if the application is not available
+    </p>     
+}
+else if (this.modules != null && this.modules.Any())
 {
     <div class="my-2 d-flex">
         <div class="d-flex w-100">
             <div class="ms-auto me-0">
                 @foreach (var module in modulesByClients)
                 {
-                    <button type="button" class="btn btn-primary btn-get-trigger ms-auto me-1">
+                    <button type="button" class="btn btn-primary btn-get-trigger ms-auto me-1" @onclick="async () => await GenerateByClientIdAsync(module.ClientId)">
                         <div class="d-flex">
                             <img class="btn-inner-icon my-auto ms-0 me-auto" alt="@module.ScaffoldTypeName" src="@GetApplicationUrl(module.IconUrl)"/>
                             <span class="my-auto ms-2">@module.ScaffoldTypeName (@module.Count)</span>
@@ -26,60 +32,62 @@
                 }
                 @foreach (var module in modulesByType)
                 {
-                    <button type="button" class="btn btn-primary btn-get-trigger ms-auto me-1">
+                    <button type="button" class="btn btn-primary btn-get-trigger ms-auto me-1" @onclick="async () => await GenerateByInstanceTypeAsync(module.Type)">
                         <div class="d-flex">
                             <i class="@GetInstanceTypeIcon(module.Type)"></i>
                             <span class="my-auto ms-2">@module.Type (@module.Count)</span>
                         </div>
                     </button>
                 }
-                <button type="button" class="btn btn-primary mx-0">
-                    All
+                <button type="button" class="btn btn-primary mx-0" @onclick="async () => await GenerateAsync()">
+                    All (@modules.Count())
                 </button>
             </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col" class="fit">Icon</th>
-            <th scope="col">Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Generated</th>
-            <th scope="col">Locked</th>
-            <th scope="col" class="fit">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var module in modules)
-        {
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
             <tr>
-                <td class="fit">
-                    <img class="module-icon" src="@GetApplicationUrl(module.IconUrl)" alt="@module.Name"/>
-                </td>
-                <td>@module.Name</td>
-                <td>
-                    <span class="badge bg-primary">
-                        <i class="@GetInstanceTypeIcon(module.Type)"></i> @module.Type
-                    </span>
-                </td>
-                <td>
-                    <CheckSign Value="module.Generated"/>
-                </td>
-                <td>
-                    <CheckSign Value="module.Locked"/>
-                </td>
-                <td class="fit">
-                    <div class="d-flex">
-                        <button class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Folders", module.Folders)'>@module.Folders.Count() Folder@(module.Folders.Count() != 1 ? "s" : string.Empty)</button>
-                        <button class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Files", module.Files)'>@module.Files.Count() File@(module.Files.Count() != 1 ? "s" : string.Empty)</button>
-                        <button class="w-auto btn btn-primary" @onclick="async () => await GenerateAsync(module.Id)">Generate</button>
-                    </div>
-                </td>
+                <th scope="col" class="fit">Icon</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Generated</th>
+                <th scope="col">Locked</th>
+                <th scope="col" class="fit">Actions</th>
             </tr>
-        }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach (var module in modules)
+            {
+                <tr>
+                    <td class="fit">
+                        <img class="module-icon" src="@GetApplicationUrl(module.IconUrl)" alt="@module.Name"/>
+                    </td>
+                    <td>@module.Name</td>
+                    <td>
+                        <span class="badge bg-primary">
+                            <i class="@GetInstanceTypeIcon(module.Type)"></i> @module.Type
+                        </span>
+                    </td>
+                    <td>
+                        <CheckSign Value="module.Generated"/>
+                    </td>
+                    <td>
+                        <CheckSign Value="module.Locked"/>
+                    </td>
+                    <td class="fit d-flex w-100">
+                        <div class="d-flex ms-auto me-0">
+                            <button type="button" class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Folders", module.Folders)'>@module.Folders.Count() Folder@(module.Folders.Count() != 1 ? "s" : string.Empty)</button>
+                            <button type="button" class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Files", module.Files)'>@module.Files.Count() File@(module.Files.Count() != 1 ? "s" : string.Empty)</button>
+                            <button type="button" class="w-auto btn btn-primary" @onclick="async () => await GenerateAsync(module.Id)">Generate</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 }
 else
 {
@@ -97,17 +105,10 @@ else
                 @if (modalFileSystemItems != null)
                 {
                     <table class="table w-100">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Path</th>
-                        </tr>
-                        </thead>
                         <tbody>
                         @foreach (var fileSystemItem in modalFileSystemItems)
                         {
                             <tr>
-                                <td>@fileSystemItem.Name</td>
                                 <td>@fileSystemItem.Path</td>
                             </tr>
                         }
@@ -128,7 +129,65 @@ else
     private string fileSystemItemsModalTitle;
     private IEnumerable<ScaffoldModuleFileSystemItem> modalFileSystemItems;
 
+    private bool IsApplicationAvailable => ApplicationServiceAgent.Available;
+    
     protected override async Task OnInitializedAsync()
+    {
+        await this.LoadModulesAsync();
+        ApplicationStore.ApplicationChanged += async (_, _) =>
+        {
+            await ApplicationServiceAgent.SyncAvailabilityAsync();
+            await LoadModulesAsync();
+        };
+
+        ApplicationServiceAgent.GenerationCompleted += async (_, _) =>
+        {
+            await LoadModulesAsync();
+        };
+        
+        await base.OnInitializedAsync();
+    }
+
+    private async Task GenerateAsync()
+    {
+        var result = await ApplicationServiceAgent.GenerateAsync();
+        await HandleGenerationResultAsync(result);
+    }
+    
+    private async Task GenerateAsync(string moduleId)
+    {
+        var result = await ApplicationServiceAgent.GenerateAsync(moduleId);
+        await HandleGenerationResultAsync(result);
+    }
+
+    private async Task GenerateByInstanceTypeAsync(InstanceType instanceType)
+    {
+        var result = await ApplicationServiceAgent.GenerateByInstanceTypeAsync(instanceType);
+        await HandleGenerationResultAsync(result);
+    }
+
+    private async Task GenerateByClientIdAsync(string clientId)
+    {
+        var result = await ApplicationServiceAgent.GenerateByClientIdAsync(clientId);
+        await HandleGenerationResultAsync(result);
+    }
+
+    private async Task HandleGenerationResultAsync(GenerationResult result)
+    {
+        if (result.GenerationStatus == ScaffoldModuleGenerationStatusType.Successful)
+        {
+            this.BootstrapService.ShowToast("Modules have been generated successfully", "success");
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                this.BootstrapService.ShowToast(error, "warning");
+            }
+        }
+    }
+    
+    private async Task LoadModulesAsync()
     {
         this.modules = await ApplicationServiceAgent.FetchScaffoldModulesAsync();
         this.modulesByClients = this.modules
@@ -137,14 +196,10 @@ else
         this.modulesByType = this.modules
             .GroupBy(x => x.Type)
             .Select(x => (x.Count(), x.First().IconUrl, x.First().Type));
-
-        await base.OnInitializedAsync();
+        
+        StateHasChanged();
     }
-
-    private async Task GenerateAsync(string moduleId)
-    {
-    }
-
+    
     private string GetApplicationUrl(string relativeUrl)
     {
         var applicationUrl = this.ApplicationStore.SelectedApplication.Url;

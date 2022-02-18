@@ -1,34 +1,58 @@
 ﻿<nav class="navbar navbar-light navbar-expand-lg" id="navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand ms-0 me-auto" href="/">
             <img src="/assets/images/logo.svg" alt="Client Builder" class="d-inline-block align-text-top">
-            <span class="text">Client Builder</span>
+            <span class="text d-none d-md-block">Client Builder</span>
         </a>
-        <button class="navbar-toggler btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="mdi mdi-menu"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-                <li class="nav-item">
-                    <NavLink href="" ActiveClass="active" Match="NavLinkMatch.All" class="nav-link">
+        <ul class="navbar-nav m-auto my-2 my-lg-0 navbar-nav-scroll" id="main-navbar-nav">
+            <li class="nav-item">
+                <NavLink href="" ActiveClass="active" Match="NavLinkMatch.All" class="nav-link">
+                    <span class="nav-link-icon">
+                        <i class="mdi mdi-home"></i>
+                    </span>
+                    <span class="nav-link-text">
                         Home
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <NavLink href="sources" ActiveClass="active" class="nav-link">
+                    </span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="sources" ActiveClass="active" class="nav-link">
+                    <span class="nav-link-icon">
+                        <i class="mdi mdi-link-box"></i>
+                    </span>
+                    <span class="nav-link-text">
                         Sources
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <NavLink href="modules" ActiveClass="active" class="nav-link">
+                    </span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink href="modules" ActiveClass="active" class="nav-link">
+                    <span class="nav-link-icon">
+                        <i class="mdi mdi-widgets"></i>
+                    </span>
+                    <span class="nav-link-text">
                         Modules
-                    </NavLink>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank" href="https://docs.clientbuilder.dev/">Docs</a>
-                </li>
-            </ul>
-            <QuickGenerationDropdown/>
+                    </span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://docs.clientbuilder.dev/">
+                    <span class="nav-link-icon">
+                        <i class="mdi mdi-file-document"></i>
+                    </span>
+                    <span class="nav-link-text">
+                        Docs
+                    </span>
+                </a>
+            </li>
+        </ul>
+        <div class="ms-auto me-0">
+            <button class="navbar-toggler btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="mdi mdi-menu"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <QuickGenerationDropdown/>
+            </div>
         </div>
     </div>
 </nav>

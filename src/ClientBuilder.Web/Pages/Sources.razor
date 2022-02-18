@@ -4,7 +4,7 @@
 
 <PageTitle>Sources | Client Builder</PageTitle>
 
-<TitleSection Title="Register your applications">
+<TitleSection Title="Register your applications" ShowAlert="true">
     Sources are the applications from which the Client Builder consumes the rendering logic. On the form below you can 
     find an easy way to register as many applications as you need.
 </TitleSection>
@@ -53,7 +53,7 @@
     </div>
 </div>
 
-<div>
+<div class="table-responsive">
     <table class="table">
         <thead>
         <tr>
@@ -68,8 +68,8 @@
             <tr>
                 <td>@application.Name</td>
                 <td>@application.Url</td>
-                <td class="fit">
-                    <div class="d-flex">
+                <td class="fit d-flex w-100">
+                    <div class="d-flex ms-auto me-0">
                         <button class="ms-0 w-auto btn btn-primary" disabled="@(application.Id == SelectedApplicationId)" @onclick="() => SelectApplicationAsync(application.Id)">
                             Select@(application.Id == SelectedApplicationId ? "ed" : string.Empty)
                         </button>

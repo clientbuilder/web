@@ -3,6 +3,8 @@
   * {
     font-family: $font-family-main;
   }
+  
+  color: $text-color;
 }
 
 ::selection {
@@ -21,6 +23,6 @@
   overflow: auto !important;
 }
 
-.text-white {
-  color: $white !important;
+*:focus-visible {
+  outline: none !important;
 }

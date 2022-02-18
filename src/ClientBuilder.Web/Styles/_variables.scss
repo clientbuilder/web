@@ -24,6 +24,8 @@ $theme-colors: (
         dark: $dark,
 );
 
+$text-color: darken($primary, 12%);
+
 $img-filter-primary: invert(39%) sepia(18%) saturate(703%) hue-rotate(207deg) brightness(93%) contrast(85%);
 $img-filter-secondary: invert(97%) sepia(14%) saturate(1660%) hue-rotate(181deg) brightness(96%) contrast(95%);
 
