@@ -1,6 +1,21 @@
 ﻿@inject IApplicationServiceAgent ApplicationServiceAgent
+@inject IApplicationStore Store
 
-@if (!ShowAlert || IsApplicationAvailable)
+@if (ShowAlert && IsApplicationInPendingState)
+{
+    <div class="p-4 mb-4 bg-secondary rounded main-box-shadow">
+        <div class="container-fluid py-2">
+            <h1 class="display-5 fw-bold text-primary">Initializing a connection..</h1>
+            <p class="col-md-8 fs-5 text-primary">
+                <span>
+                    Please wait! We are trying to initialize a connection with your application. Take into account 
+                    that if the initialization process takes too much time maybe your application is unavailable.
+                </span>
+            </p>
+        </div>
+    </div>
+}
+else if (!ShowAlert || IsApplicationAvailable)
 {
     <div class="p-4 mb-4 bg-primary rounded main-box-shadow">
         <div class="container-fluid py-2">
@@ -15,11 +30,25 @@ else
 {
     <div class="p-4 mb-4 bg-danger rounded main-box-shadow">
         <div class="container-fluid py-2">
-            <h1 class="display-5 fw-bold text-secondary">Application is not available</h1>
+            <h1 class="display-5 fw-bold text-white">Application is not available</h1>
             <p class="col-md-8 fs-5 text-white">
-                Current application is not connected to the Client Builder UI. Please check whether your
-                development server is turned on or your URL is correct. Please consider that error could be
-                part of other issue. Please recheck the CORS middleware or your ASP.NET configuration.
+                @if (Store.SelectedApplicationId == Guid.Empty)
+                {
+                    <span>
+                        It seems you have not registered an application yet. Please go to the 
+                        <NavLink href="/sources" class="text-white fw-bold">Sources page</NavLink>  and register your application. If your 
+                        application is active you will be able to generate your modules.
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        Current application is not connected to the Client Builder UI. Please check whether your
+                        development server is turned on or your URL is correct. Please consider that error could be
+                        part of other issue. Please recheck the CORS middleware or your ASP.NET configuration.
+                    </span>
+                }
+                
             </p>
         </div>
     </div>
@@ -37,9 +66,12 @@ else
 
     private bool IsApplicationAvailable => ApplicationServiceAgent.Available;
 
+    private bool IsApplicationInPendingState => ApplicationServiceAgent.Pending;
+    
     protected override async Task OnInitializedAsync()
     {
         ApplicationServiceAgent.AvailabilityChanged += (_, _) => { StateHasChanged(); };
+        ApplicationServiceAgent.EnteredPendingState += (_, _) => { StateHasChanged(); };
         await base.OnInitializedAsync();
     }
 

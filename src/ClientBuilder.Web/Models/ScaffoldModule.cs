@@ -20,8 +20,6 @@ public class ScaffoldModule
 
     public bool Generated { get; set; }
 
-    public bool Locked { get; set; }
-
     public string SourceDirectory { get; set; }
 
     public IEnumerable<ScaffoldModuleFileSystemItem> Files { get; set; }

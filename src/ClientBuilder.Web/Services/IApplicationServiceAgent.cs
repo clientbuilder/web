@@ -9,9 +9,13 @@ public interface IApplicationServiceAgent
 {
     event EventHandler AvailabilityChanged;
 
+    event EventHandler EnteredPendingState;
+
     event EventHandler GenerationCompleted;
 
     bool Available { get; }
+
+    bool Pending { get; set; }
 
     Task SyncAvailabilityAsync();
 

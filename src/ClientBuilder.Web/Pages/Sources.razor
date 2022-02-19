@@ -11,7 +11,8 @@
 
 <div class="my-2 d-flex">
     <div class="d-flex w-100">
-        <button type="button" class="btn btn-primary ms-auto me-0" @onclick="() => SelectApplicationForMutationAsync(new ApplicationDto())">
+        <h4 class="ms-0 me-auto fw-bold my-auto">Applications</h4>
+        <button type="button" class="btn btn-primary my-auto ms-auto me-0" @onclick="() => SelectApplicationForMutationAsync(new ApplicationDto())">
             Add Application
         </button>
     </div>
@@ -53,35 +54,44 @@
     </div>
 </div>
 
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Url</th>
-            <th scope="col" class="fit">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var application in Applications)
-        {
+@if (Applications.Any())
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
             <tr>
-                <td>@application.Name</td>
-                <td>@application.Url</td>
-                <td class="fit d-flex w-100">
-                    <div class="d-flex ms-auto me-0">
-                        <button class="ms-0 w-auto btn btn-primary" disabled="@(application.Id == SelectedApplicationId)" @onclick="() => SelectApplicationAsync(application.Id)">
-                            Select@(application.Id == SelectedApplicationId ? "ed" : string.Empty)
-                        </button>
-                        <button class="ms-1 w-auto btn btn-primary" @onclick="() => SelectApplicationForMutationAsync(application)">Edit</button>
-                        <button class="ms-1 w-auto btn btn-primary" @onclick="() => DeleteApplicationAsync(application.Id)">Delete</button>
-                    </div>
-                </td>
+                <th scope="col">Name</th>
+                <th scope="col">Url</th>
+                <th scope="col" class="fit">Actions</th>
             </tr>
-        }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            @foreach (var application in Applications)
+            {
+                <tr>
+                    <td>@application.Name</td>
+                    <td>@application.Url</td>
+                    <td class="fit d-flex w-100">
+                        <div class="d-flex ms-auto me-0">
+                            <button class="ms-0 w-auto btn btn-primary" disabled="@(application.Id == SelectedApplicationId)" @onclick="() => SelectApplicationAsync(application.Id)">
+                                Select@(application.Id == SelectedApplicationId ? "ed" : string.Empty)
+                            </button>
+                            <button class="ms-1 w-auto btn btn-primary" @onclick="() => SelectApplicationForMutationAsync(application)">Edit</button>
+                            <button class="ms-1 w-auto btn btn-primary" @onclick="() => DeleteApplicationAsync(application.Id)">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <Alert>
+        There are no registered applications. Use the button above to register an application.
+    </Alert>
+}
 
 @code {
     private ApplicationDto currentApplicationEditModel = new();

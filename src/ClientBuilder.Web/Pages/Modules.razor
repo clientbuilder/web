@@ -10,16 +10,17 @@
     If you need to generate modules in groups you can use our built-in bulk triggers.
 </TitleSection>
 
-@if (!IsApplicationAvailable)
+@if (!IsApplicationAvailable || IsApplicationInPendingState)
 {
-    <p>
-        Cannot load modules if the application is not available
-    </p>     
+    <Alert Variant="warning">
+        Cannot load modules if the application is not available!
+    </Alert>     
 }
 else if (this.modules != null && this.modules.Any())
 {
     <div class="my-2 d-flex">
         <div class="d-flex w-100">
+            <h4 class="ms-0 me-auto fw-bold my-auto">Modules</h4>
             <div class="ms-auto me-0">
                 @foreach (var module in modulesByClients)
                 {
@@ -53,7 +54,6 @@ else if (this.modules != null && this.modules.Any())
                 <th scope="col">Name</th>
                 <th scope="col">Type</th>
                 <th scope="col">Generated</th>
-                <th scope="col">Locked</th>
                 <th scope="col" class="fit">Actions</th>
             </tr>
             </thead>
@@ -73,9 +73,6 @@ else if (this.modules != null && this.modules.Any())
                     <td>
                         <CheckSign Value="module.Generated"/>
                     </td>
-                    <td>
-                        <CheckSign Value="module.Locked"/>
-                    </td>
                     <td class="fit d-flex w-100">
                         <div class="d-flex ms-auto me-0">
                             <button type="button" class="w-auto btn btn-secondary me-1" @onclick='async () => await ShowModuleSystemItemsAsync("Module Folders", module.Folders)'>@module.Folders.Count() Folder@(module.Folders.Count() != 1 ? "s" : string.Empty)</button>
@@ -91,7 +88,9 @@ else if (this.modules != null && this.modules.Any())
 }
 else
 {
-    <p>No modules are registered!</p>
+    <Alert Variant="warning">
+        No modules are registered!
+    </Alert>
 }
 
 <div class="modal fade" id="module-system-items-modal" tabindex="-1" aria-labelledby="module-system-items-modal-label" aria-hidden="true">
@@ -131,6 +130,8 @@ else
 
     private bool IsApplicationAvailable => ApplicationServiceAgent.Available;
     
+    private bool IsApplicationInPendingState => ApplicationServiceAgent.Pending;
+    
     protected override async Task OnInitializedAsync()
     {
         await this.LoadModulesAsync();
@@ -144,6 +145,8 @@ else
         {
             await LoadModulesAsync();
         };
+
+        ApplicationServiceAgent.EnteredPendingState += (_, _) => { StateHasChanged(); };
         
         await base.OnInitializedAsync();
     }

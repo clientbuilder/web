@@ -25,12 +25,22 @@
 
 .form-control {
   font-size: .8rem;
+  border-radius: $border-radius;
   @include box-shadow(none !important);
   
   &:focus,
   &:active {
     border-color: $primary;
   }
+}
+
+.alert {
+  border-radius: $border-radius;
+  font-weight: 500;
+}
+
+.toast {
+  border-radius: $border-radius;
 }
 
 .validation-message {
@@ -76,10 +86,13 @@
 .modal {
   .modal-content {
     border: none;
+    border-radius: calc(.5rem + #{$border-radius}) calc(.5rem + #{$border-radius}) $border-radius $border-radius;
 
     .modal-header {
       padding: .8rem 1rem;
       background: $primary;
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
       
       .btn-close {
         background-size: .8em;

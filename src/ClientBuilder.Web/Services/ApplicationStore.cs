@@ -72,6 +72,11 @@ public class ApplicationStore : IApplicationStore
         }
 
         await this.SaveApplicationsAsync(applicationsList);
+
+        if (this.selectedApplicationId == Guid.Empty && applicationsList.Any())
+        {
+            await this.SelectApplicationAsync(applicationsList.First().Id);
+        }
     }
 
     public async Task DeleteApplicationAsync(Guid applicationId)
@@ -85,11 +90,16 @@ public class ApplicationStore : IApplicationStore
         }
 
         await this.SaveApplicationsAsync(applicationsList);
+
+        if (applicationId == this.selectedApplicationId)
+        {
+            await this.SelectApplicationAsync(applicationsList.FirstOrDefault()?.Id ?? Guid.Empty);
+        }
     }
 
     public async Task SelectApplicationAsync(Guid applicationId)
     {
-        if (this.applications.All(x => x.Id != applicationId))
+        if (applicationId != Guid.Empty && this.applications.All(x => x.Id != applicationId))
         {
             return;
         }
@@ -114,6 +124,11 @@ public class ApplicationStore : IApplicationStore
 
         var storedSelectedApplicationId = await this.localStorageService.GetItemAsync<Guid>(SelectedApplicationLocalStorageKey);
         this.selectedApplicationId = storedSelectedApplicationId;
+
+        if (this.applications.All(x => x.Id != this.selectedApplicationId))
+        {
+            await this.SelectApplicationAsync(this.applications.FirstOrDefault()?.Id ?? Guid.Empty);
+        }
     }
 
     private async Task SaveApplicationsAsync(IList<Application> applicationsList)

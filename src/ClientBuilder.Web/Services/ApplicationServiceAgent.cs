@@ -25,35 +25,24 @@ public class ApplicationServiceAgent : IApplicationServiceAgent
     public ApplicationServiceAgent(IApplicationStore applicationStore)
     {
         var currentApplication = applicationStore.SelectedApplication;
-
-        if (currentApplication != null)
-        {
-            this.httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(currentApplication.Url),
-            };
-        }
-        else
-        {
-            this.httpClient = new HttpClient();
-        }
+        this.httpClient = this.CreateHttpClient(currentApplication);
 
         applicationStore.ApplicationChanged += async (_, application) =>
         {
-            this.httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(application.Url),
-            };
-
+            this.httpClient = this.CreateHttpClient(application);
             await this.SyncAvailabilityAsync();
         };
     }
 
     public event EventHandler AvailabilityChanged;
 
+    public event EventHandler EnteredPendingState;
+
     public event EventHandler GenerationCompleted;
 
     public bool Available { get; private set; }
+
+    public bool Pending { get; set; }
 
     public async Task<IEnumerable<ScaffoldModule>> FetchScaffoldModulesAsync()
     {
@@ -88,9 +77,13 @@ public class ApplicationServiceAgent : IApplicationServiceAgent
 
     public async Task SyncAvailabilityAsync()
     {
+        this.Pending = true;
+        this.EnteredPendingState?.Invoke(this, EventArgs.Empty);
+
         try
         {
-            var checkResponse = await this.httpClient.PostAsync(this.GetRelativeApiEndpoint("check"), new StringContent(string.Empty));
+            var checkResponse =
+                await this.httpClient.PostAsync(this.GetRelativeApiEndpoint("check"), new StringContent(string.Empty));
             this.Available = checkResponse.IsSuccessStatusCode;
         }
         catch (Exception ex)
@@ -98,8 +91,11 @@ public class ApplicationServiceAgent : IApplicationServiceAgent
             Console.WriteLine(ex.Message);
             this.Available = false;
         }
-
-        this.AvailabilityChanged?.Invoke(this, EventArgs.Empty);
+        finally
+        {
+            this.Pending = false;
+            this.AvailabilityChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private async Task<GenerationResult> GenerateAsync(string route, object requestData)
@@ -130,5 +126,18 @@ public class ApplicationServiceAgent : IApplicationServiceAgent
     private string GetRelativeApiEndpoint(string route)
     {
         return $"/_cb/api/scaffold/{route}";
+    }
+
+    private HttpClient CreateHttpClient(Application application)
+    {
+        if (application != null)
+        {
+            return new HttpClient
+            {
+                BaseAddress = new Uri(application.Url),
+            };
+        }
+
+        return new HttpClient();
     }
 }

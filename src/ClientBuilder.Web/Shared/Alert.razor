@@ -1,0 +1,14 @@
+﻿<div class="w-100">
+    <span class="d-block w-100 alert alert-@Variant">
+        @ChildContent
+    </span>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Variant { get; set; } = "primary";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}
