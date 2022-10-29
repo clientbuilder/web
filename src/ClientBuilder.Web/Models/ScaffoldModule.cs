@@ -10,8 +10,6 @@ public class ScaffoldModule
 
     public string Name { get; set; }
 
-    public string IconUrl { get; set; }
-
     public string ScaffoldTypeName { get; set; }
 
     public InstanceType Type { get; set; }
