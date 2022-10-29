@@ -49,18 +49,20 @@ else if (this.modules != null && this.modules.Any())
     <div class="table-responsive">
         <table class="table">
             <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Generated</th>
-                <th scope="col" class="fit">Actions</th>
-            </tr>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Scaffold Type</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Generated</th>
+                    <th scope="col" class="fit">Actions</th>
+                </tr>
             </thead>
             <tbody>
             @foreach (var module in modules)
             {
                 <tr>
                     <td>@module.Name</td>
+                    <td>@module.ScaffoldTypeName</td>
                     <td>
                         <span class="badge bg-primary">
                             <i class="@GetInstanceTypeIcon(module.Type)"></i> @module.Type
